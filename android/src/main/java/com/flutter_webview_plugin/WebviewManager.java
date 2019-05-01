@@ -244,6 +244,13 @@ class WebviewManager {
                 FlutterWebviewPlugin.channel.invokeMethod("onProgressChanged", args);
             }
         });
+
+        webViewClient.registerCallPhoneCallBack(new BrowserClient.CallPhoneCallBack() {
+            @Override
+            public void call(String url) {
+                activity.startActivity(new Intent(Intent.ACTION_DIAL, Uri.parse(url)));
+            }
+        });
     }
 
     private Uri getOutputFilename(String intentType) {

@@ -18,6 +18,16 @@ import java.util.regex.Pattern;
  */
 
 public class BrowserClient extends WebViewClient {
+    public interface CallPhoneCallBack {
+        void call(String url);
+    }
+
+    private CallPhoneCallBack callPhoneCallBack;
+
+    public void registerCallPhoneCallBack(CallPhoneCallBack cb) {
+        callPhoneCallBack = cb;
+    }
+
     private Pattern invalidUrlPattern = null;
 
     public BrowserClient() {
@@ -72,6 +82,12 @@ public class BrowserClient extends WebViewClient {
         data.put("url", url);
         data.put("type", isInvalid ? "abortLoad" : "shouldStart");
 
+        if (url.startsWith("tel:")) {
+            //Handle telephony Urls
+            callPhoneCallBack.call(url);
+            return true;
+        }
+
         FlutterWebviewPlugin.channel.invokeMethod("onState", data);
         return isInvalid;
     }
@@ -84,6 +100,12 @@ public class BrowserClient extends WebViewClient {
         Map<String, Object> data = new HashMap<>();
         data.put("url", url);
         data.put("type", isInvalid ? "abortLoad" : "shouldStart");
+
+        if (url.startsWith("tel:")) {
+            //Handle telephony Urls
+            callPhoneCallBack.call(url);
+            return true;
+        }
 
         FlutterWebviewPlugin.channel.invokeMethod("onState", data);
         return isInvalid;

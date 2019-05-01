@@ -297,6 +297,11 @@ static NSString *const CHANNEL_NAME = @"flutter_webview_plugin";
         ([webView.URL.scheme isEqualToString:@"http"] ||
          [webView.URL.scheme isEqualToString:@"https"] ||
          [webView.URL.scheme isEqualToString:@"about"])) {
+
+         if ([navigationAction.request.URL.scheme isEqualToString:@"tel"]) {
+                         [[UIApplication sharedApplication] openURL:navigationAction.request.URL options:@{} completionHandler:nil];
+                     }
+
          if (isInvalid) {
             decisionHandler(WKNavigationActionPolicyCancel);
          } else {
