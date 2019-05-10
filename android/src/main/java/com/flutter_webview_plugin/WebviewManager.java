@@ -135,7 +135,7 @@ class WebviewManager {
                             if (webView.canGoBack()) {
                                 webView.goBack();
                             } else {
-                                close();
+                                FlutterWebviewPlugin.channel.invokeMethod("onBack", null);
                             }
                             return true;
                     }
@@ -242,13 +242,6 @@ class WebviewManager {
                 Map<String, Object> args = new HashMap<>();
                 args.put("progress", progress / 100.0);
                 FlutterWebviewPlugin.channel.invokeMethod("onProgressChanged", args);
-            }
-        });
-
-        webViewClient.registerCallPhoneCallBack(new BrowserClient.CallPhoneCallBack() {
-            @Override
-            public void call(String url) {
-                activity.startActivity(new Intent(Intent.ACTION_DIAL, Uri.parse(url)));
             }
         });
     }
